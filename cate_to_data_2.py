@@ -15,7 +15,6 @@ web_cates = cursor.fetchall()
 
 def get_cate(hostname):
     hostname = str(hostname)
-    maxlen = 0
     for row in web_cates:
         add = hostname.find(str(row[0]))
         if add == 0:

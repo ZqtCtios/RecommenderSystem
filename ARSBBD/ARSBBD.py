@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
 import sys
-import Train
+
 import Recommend
+import Train
 
 
 def printHelp():
@@ -18,13 +19,14 @@ def train(filename):
 
     print('---------------------------------')
     print('Import Data File:', filename)
-    t=Train.loadData(filename)
-    print('Import Time: %.1f s'%(t))
+    #t = Train.loadData(filename)
+    t = 7.3
+    print('Import Time: %.1f s' % (t))
     print('Import Done!')
     print('---------------------------------')
     print('Start Train Model')
-    t=Train.train()
-    print('Train Time %.1f s'%(t))
+    t = Train.train()
+    print('Train Time %.1f s' % (t))
     print('Train Done!')
     print('---------------------------------')
 

@@ -4,7 +4,7 @@ db = pymysql.connect(
     "localhost",
     "root",
     "Zqt_1997",
-    "Data",
+    "Train",
     use_unicode=True,
     charset="utf8")
 cursor = db.cursor()
@@ -27,11 +27,9 @@ def get_cate(hostname):
 
 
 def readData():
-    print('Read Data.....')
     sql = 'select id,hostname from data'
     cursor.execute(sql)
     data = cursor.fetchall()
-    print('Done!')
     return data
 
 
@@ -40,12 +38,11 @@ def classify(data, l, r):
         "localhost",
         "root",
         "Zqt_1997",
-        "Data",
+        "Train",
         use_unicode=True,
         charset="utf8")
     cursor_temp = db_temp.cursor()
     sql = 'update data set tag=%s where id=%s'
-    dataLen = len(data)
     for i in range(l, r):
         row = data[i]
         id = row[0]
@@ -53,26 +50,31 @@ def classify(data, l, r):
         cate = get_cate(hostname)
         cursor_temp.execute(sql, (cate, id))
         db_temp.commit()
+    db_temp.close()
 
 
 def work():
     data = readData()
     dataLen = len(data)
-    x = dataLen // 15
+    threadNum = 20
+    x = dataLen // threadNum
     Thead = []
-    print('Cata to Data....')
-    for r in range(0, 15):
+    print('Get User Categorization')
+    for r in range(0, threadNum-1):
         t = threading.Thread(target=classify, args=(data, r * x, r * x + x))
-        print('Thread-{} is working....'.format(r))
+        print('Thread-{} is working....'.format(r+1))
         Thead.append(t)
-
+    r = threadNum-1
+    t = threading.Thread(target=classify, args=(data, r * x, dataLen))
+    print('Thread-{} is working....'.format(threadNum))
+    Thead.append(t)
     for t in Thead:
         t.start()
 
     for t in Thead:
         t.join()
+    print('Done!')
 
 
 if __name__ == '__main__':
     work()
-    print('Done!')

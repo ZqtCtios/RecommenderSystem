@@ -19,8 +19,8 @@ def train(filename):
 
     print('---------------------------------')
     print('Import Data File:', filename)
-    #t = Train.loadData(filename)
-    t = 7.3
+    t = Train.loadData(filename)
+    #t = 7.3
     print('Import Time: %.1f s' % (t))
     print('Import Done!')
     print('---------------------------------')

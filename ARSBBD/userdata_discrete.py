@@ -49,7 +49,11 @@ def make_data(dic):
         for row in rows:
             if str(row[0]) == 'Uncategorized':
                 continue
-            user_data[user][row[0]] += 1
+            try:
+                user_data[user][row[0]] += 1
+            except:
+                print(user,row[0])
+                exit()
         sum=0
         for key in user_data[user].keys():
             sum += user_data[user][key]

@@ -3,6 +3,7 @@ import time
 
 import pymysql
 import cate_to_data
+import userdata_discrete
 
 def getDBConnection(database):
     db = pymysql.connect(
@@ -41,6 +42,7 @@ def loadData(filename):
 def train():
     t = time.time()
     cate_to_data.work()
+    userdata_discrete.work()
     return time.time()-t
 
 if __name__ == '__main__':

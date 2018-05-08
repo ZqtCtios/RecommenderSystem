@@ -3,7 +3,7 @@ db = pymysql.connect(
     "localhost",
     "root",
     "Zqt_1997",
-    "Data",
+    "Train",
     use_unicode=True,
     charset="utf8")
 cursor = db.cursor()
@@ -22,8 +22,8 @@ def creat_table():
         sql += ',{} DOUBLE NOT NULL'.format(cate[:3])
         dic[cate] = 0
     sql += ') ENGINE = InnoDB'
-    print(sql)
     try:
+        cursor.execute('DROP TABLE IF EXISTS user')
         cursor.execute(sql)
         db.commit()
         print('Done!')
@@ -46,7 +46,6 @@ def make_data(dic):
         user_data[user] = dic.copy()
         cursor.execute(sql2, user)
         rows = cursor.fetchall()
-        print(user)
         for row in rows:
             if str(row[0]) == 'Uncategorized':
                 continue
@@ -58,28 +57,30 @@ def make_data(dic):
             continue
         for key in user_data[user].keys():
             user_data[user][key] /= sum
-        print(user_data)
     print('Done!')
     return useraddress, user_data
 
 
 def save_to_db(dic, useraddress, user_data):
     print('Sava UserData to db')
+    print('Sum of User ',len(useraddress))
     sql='insert into user values(%s'
     for x in range(len(dic.keys())):
         sql += ',%s'
     sql += ')'
-    print(sql)
     for user in useraddress:
         dic=user_data[user].copy()
         data=list(dic.values())
         data.insert(0, user)
-        print(len(data), data)
         cursor.execute(sql, data)
         db.commit()
     print('Done!')
 
-if __name__ == '__main__':
+def work():
+    print('Get User Attribute')
     dic=creat_table()
     useraddress, user_data=make_data(dic)
-    save_to_db(dic, useraddress, user_data)
+    save_to_db(dic, useraddress, user_data) 
+    print('Done!')
+
+
